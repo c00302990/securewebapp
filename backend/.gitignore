@@ -1,0 +1,42 @@
+HELP.md
+
+# 백엔드 빌드/로그 파일일
+backend/target/
+backend/build/
+backend/logs/
+backend/*.log
+backend/*.class
+backend/*.jar
+
+# Maven Wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# 환경 설정
+backend/application.properties
+backend/application.yml
+backend/.env
+
+# IDE 설정정
+.idea/
+*.iws
+*.iml
+*.ipr
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.vscode/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# OS 관련
+.DS_Store
+Thumbs.db
