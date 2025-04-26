@@ -6,6 +6,7 @@ import com.changmin.securewebapp.dto.PostSummaryDto;
 import com.changmin.securewebapp.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class PostController {
         return ResponseEntity.ok(postService.createPost(dto, username));
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<PostSummaryDto>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
