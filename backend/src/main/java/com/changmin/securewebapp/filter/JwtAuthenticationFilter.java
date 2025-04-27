@@ -33,25 +33,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String authHeader = request.getHeader("Authorization");
 
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			String token = authHeader.substring(7);
-			if (jwtUtil.validateToken(token)) {
-				String username = jwtUtil.extractUsername(token);
+		if (authHeader == null || !authHeader.startsWith("Bearer ")){
+			filterChain.doFilter(request, response);
+			return;
+		}
 
-				User user = userRepository.findByUsername(username)
-						.orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
+		String token = authHeader.substring(7);
+		if (jwtUtil.validateToken(token)) {
+			String username = jwtUtil.extractUsername(token);
 
-				String role = user.getRole();
+			User user = userRepository.findByUsername(username).orElse(null);
 
-				UsernamePasswordAuthenticationToken authentication =
-						new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
-
-				authentication.setDetails(
-						new WebAuthenticationDetailsSource().buildDetails(request)
-				);
-
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+			if (user == null) {
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.getWriter().write("Unauthorized: 사용자 정보를 찾을 수 없음.");
+				return;
 			}
+
+			String role = user.getRole();
+
+			UsernamePasswordAuthenticationToken authentication =
+					new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
+
+			authentication.setDetails(
+					new WebAuthenticationDetailsSource().buildDetails(request)
+			);
+
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 
 		filterChain.doFilter(request, response);

@@ -1,5 +1,6 @@
 package com.changmin.securewebapp.service;
 
+import com.changmin.securewebapp.dto.UserInfoResponseDto;
 import com.changmin.securewebapp.dto.UserRequestDto;
 import com.changmin.securewebapp.entity.User;
 import com.changmin.securewebapp.repository.UserRepository;
@@ -7,6 +8,9 @@ import com.changmin.securewebapp.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +45,19 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    public void deleteUser(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없음."));
+        userRepository.delete(user);
+    }
+
+    public List<UserInfoResponseDto> getAllUsers(){
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> new UserInfoResponseDto(user.getUsername(), user.getRole()))
+                .collect(Collectors.toList());
     }
 }
 
