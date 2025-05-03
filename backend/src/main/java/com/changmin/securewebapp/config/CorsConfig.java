@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class CorsConfig{
 
-    @Bean
+    @Bean(name = "customCorsFilter")
     public FilterRegistrationBean<CorsFilter> corsFilter(){
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("https://securewebapp-frontend.onrender.com"));
