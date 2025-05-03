@@ -13,6 +13,7 @@ HELP.md
 
 # 환경 설정
 backend/src/main/resources/application.properties
+backend/src/main/resources/.env
 
 # IDE 설정정
 .idea/
