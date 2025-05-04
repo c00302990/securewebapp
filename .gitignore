@@ -1,5 +1,7 @@
 HELP.md
 
+fly.toml
+
 # 백엔드 빌드/로그 파일일
 /backend/target/
 /backend/build/
