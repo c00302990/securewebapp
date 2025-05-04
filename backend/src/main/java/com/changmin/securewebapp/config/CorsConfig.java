@@ -15,10 +15,10 @@ public class CorsConfig{
     @Bean(name = "customCorsFilter")
     public FilterRegistrationBean<CorsFilter> corsFilter(){
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://securewebapp-eight.vercel.app"));
+        config.setAllowedOriginPatterns(List.of("https://securewebapp-eight.vercel.app"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        config.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
