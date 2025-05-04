@@ -1,7 +1,5 @@
 HELP.md
 
-fly.toml
-
 # 백엔드 빌드/로그 파일일
 /backend/target/
 /backend/build/
@@ -14,7 +12,7 @@ fly.toml
 !.mvn/wrapper/maven-wrapper.jar
 
 # 환경 설정
-backend/src/main/resources/application.properties
+# backend/src/main/resources/application.properties
 backend/src/main/resources/.env
 
 # IDE 설정정
