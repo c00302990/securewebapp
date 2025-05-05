@@ -14,7 +14,7 @@ form.addEventListener("submit", async (e) => {
   const content = document.getElementById("content").value;
 
   try {
-    const res = await fetch("http://localhost:8080/api/posts", {
+    const res = await fetch("/api/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

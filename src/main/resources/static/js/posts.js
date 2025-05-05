@@ -1,6 +1,6 @@
 async function loadPosts() {
     try {
-        const res = await fetch("http://localhost:8080/api/posts");
+        const res = await fetch("/api/posts");
         const posts = await res.json();
         renderCards(posts);
     } catch (err) {
