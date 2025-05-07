@@ -2,6 +2,7 @@ package com.changmin.securewebapp.filter;
 
 import com.changmin.securewebapp.entity.User;
 import com.changmin.securewebapp.repository.UserRepository;
+import com.changmin.securewebapp.service.LogoutService;
 import com.changmin.securewebapp.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +25,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtUtil jwtUtil;
 	private final UserRepository userRepository;
+	private final LogoutService logoutService;
+
+	public JwtAuthenticationFilter(JwtUtil jwtUtil, LogoutService logoutService, UserRepository userRepository){
+		this.jwtUtil = jwtUtil;
+		this.userRepository = userRepository;
+		this.logoutService = logoutService;
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
@@ -39,29 +47,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		String token = authHeader.substring(7);
-		if (jwtUtil.validateToken(token)) {
-			String username = jwtUtil.extractUsername(token);
 
-			User user = userRepository.findByUsername(username).orElse(null);
-
-			if (user == null) {
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				response.getWriter().write("Unauthorized: 사용자 정보를 찾을 수 없음.");
-				return;
-			}
-
-			String role = user.getRole();
-
-			UsernamePasswordAuthenticationToken authentication =
-					new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
-
-			authentication.setDetails(
-					new WebAuthenticationDetailsSource().buildDetails(request)
-			);
-
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+		if (!jwtUtil.validateToken(token)) {
+			filterChain.doFilter(request, response);
+			return;
 		}
 
-		filterChain.doFilter(request, response);
+		if(logoutService.isLoggedOut(token)){
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().write("Unauthorized: 로그아웃된 토큰입니다.");
+			return;
+		}
+
+		String username = jwtUtil.extractUsername(token);
+		User user = userRepository.findByUsername(username).orElse(null);
+
+		if (user == null) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().write("Unauthorized: 사용자 정보를 찾을 수 없음.");
+			return;
+		}
+
+		String role = user.getRole();
+
+		UsernamePasswordAuthenticationToken authentication =
+				new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority(role)));
+
+		authentication.setDetails(
+				new WebAuthenticationDetailsSource().buildDetails(request)
+		);
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
+
 }
