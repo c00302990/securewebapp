@@ -1,4 +1,4 @@
-const form = document.getElementById("postForm");
+const form = document.getElementById("post-form");
 const message = document.getElementById("message");
 
 form.addEventListener("submit", async (e) => {
@@ -7,6 +7,7 @@ form.addEventListener("submit", async (e) => {
   const token = localStorage.getItem("token");
   if (!token) {
     alert("로그인을 해주세요.");
+    window.location.href = '/login.html';
     return;
   }
 
@@ -29,7 +30,7 @@ form.addEventListener("submit", async (e) => {
     }
 
     alert("게시글이 작성되었습니다!");
-    window.location.href = "posts.html";
+    window.location.href = "/posts.html";
   } catch (err) {
     message.textContent = "오류 발생: " + err.message;
     message.classList.remove("d-none");

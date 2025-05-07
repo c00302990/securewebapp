@@ -23,7 +23,7 @@ form.addEventListener("submit", async (e) => {
     const data = await res.json();
     localStorage.setItem("token", data.token); // JWT 저장
     alert("로그인 성공!");
-    // TODO: 이후 페이지로 이동
+    window.location.href = '/posts.html';
     } catch (err) {
     errorMsg.textContent = "로그인 실패: " + err.message;
     errorMsg.classList.remove("d-none");
