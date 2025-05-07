@@ -1,3 +1,9 @@
+const token = localStorage.getItem("accessToken");
+if(token){
+    alert("이미 로그인된 사용자입니다.");
+    window.location.href = "/";
+}
+
 document.getElementById("signup-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -10,7 +16,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
             body: JSON.stringify({ username, password});
         });
 

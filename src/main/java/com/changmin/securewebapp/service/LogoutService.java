@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService {
 
-    public final Cache<String, Boolean> logoutTokenCache;
+    private final Cache<String, Boolean> logoutTokenCache;
 
     public void logout(String token){
         logoutTokenCache.put(token, true);
     }
 
-    public boolean isLoggedOut(String token) {  return logoutTokenCache.getIfPresent(token) != null;    }
-
+    public boolean isLoggedOut(String token) {
+        return logoutTokenCache.getIfPresent(token) != null;
+    }
 }

@@ -1,3 +1,9 @@
+const token = localStorage.getItem("accessToken");
+if(token){
+    alert("이미 로그인된 사용자입니다.");
+    window.location.href = "/";
+}
+
 const form = document.getElementById("loginForm");
 const errorMsg = document.getElementById("errorMsg");
 
