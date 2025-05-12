@@ -10,8 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,7 @@ public class PostService {
 
         private final PostRepository postRepository;
 
+        @Transactional(readOnly = true)
         public PostResponseDto getPost(Long postId){
                 Post post = postRepository.findById(postId)
                         .orElseThrow(()->new ResourceNotFoundException("해당 게시글을 찾을 수 없음."));
@@ -35,6 +37,7 @@ public class PostService {
                 );
         }
 
+        @Transactional
         public PostResponseDto createPost(PostRequestDto dto, String username) {
                 Post post = Post.builder()
                         .title(dto.getTitle())
@@ -54,6 +57,7 @@ public class PostService {
                 );
         }
 
+        @Transactional
         public PostResponseDto updatePost(Long id, PostRequestDto dto) {
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -79,6 +83,7 @@ public class PostService {
                 );
         }
 
+        @Transactional
         public void deletePost(Long id) {
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -94,6 +99,7 @@ public class PostService {
                 postRepository.delete(post);
         }
 
+        @Transactional(readOnly = true)
         public List<PostSummaryDto> getAllPosts() {
                 return postRepository.findAll().stream()
                         .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) // 최신순 정렬

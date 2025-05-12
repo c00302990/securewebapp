@@ -8,6 +8,7 @@ import com.changmin.securewebapp.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    @Transactional(readOnly = true)
     public String login(String username, String password) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
@@ -31,6 +33,7 @@ public class UserService {
         return jwtUtil.generateToken(username);
     }
 
+    @Transactional
     public void register(UserRequestDto dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
             throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
@@ -47,12 +50,14 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없음."));
         userRepository.delete(user);
     }
 
+    @Transactional
     public List<UserInfoResponseDto> getAllUsers(){
         List<User> users = userRepository.findAll();
         return users.stream()
@@ -60,5 +65,3 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 }
-
-
