@@ -20,6 +20,7 @@ public class PostController {
 
     private final PostService postService;
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto dto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
