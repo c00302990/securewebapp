@@ -1,15 +1,15 @@
+const token = localStorage.getItem("accessToken");
+if (!token) {
+    alert("로그인을 해주세요.");
+    window.location.href = '/login.html';
+    return;
+}
+
 const form = document.getElementById("post-form");
 const message = document.getElementById("message");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  const token = localStorage.getItem("accessToken");
-  if (!token) {
-    alert("로그인을 해주세요.");
-    window.location.href = '/login.html';
-    return;
-  }
 
   const title = document.getElementById("title").value;
   const content = document.getElementById("content").value;

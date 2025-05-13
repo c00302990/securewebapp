@@ -67,7 +67,8 @@ async function fetchWithAuth(url, options = {}){
     }
 }
 
-function logout() {
+async function logout() {
+    const token = localStorage.getItem("accessToken");
     try {
             const response = await fetch("/api/users/logout", {
                 method: "POST",

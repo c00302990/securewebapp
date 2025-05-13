@@ -30,17 +30,16 @@ const loginBtn = document.querySelector(".btn-outline-primary");
 const logoutBtn = document.querySelector(".btn-outline-danger");
 
 if(token){
-            loginBtn.style.display = "none";
-            logoutBtn.style.display = "block";
-        } else{
-                loginBtn.style.display = "block";
-                logoutBtn.style.display = "none";
-        }
-
-        logoutBtn.addEventListener("click", async (e) => {
-            e.preventDefault();
-            logout();
-        });
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "block";
+} else{
+    loginBtn.style.display = "block";
+    logoutBtn.style.display = "none";
 }
+
+logoutBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    logout();
+});
 
 loadPosts();
