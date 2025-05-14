@@ -24,7 +24,7 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto dto) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = (String) auth.getPrincipal();
+        String username = auth.getName();
         return ResponseEntity.ok(postService.createPost(dto, username));
     }
 
@@ -47,13 +47,13 @@ public class PostController {
             throw new IllegalArgumentException("요청 데이터 없음");
         }
 
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(postService.updatePost(id, dto));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         postService.deletePost(id);
         return ResponseEntity.ok("삭제되었습니다.");
     }
